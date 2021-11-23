@@ -1,22 +1,23 @@
-from flask import Flask, render_template, redirect 
+from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
 import scrape_mars
-import os
 
 app = Flask(__name__)
 
 app.config["MONGO_URI"] = "mongodb://127.0.0.1:27017/mars_info"
 mongo = PyMongo(app)
 
+
 @app.route("/")
-def home(): 
+def home():
 
     mars_info = mongo.db.mars_info.find_one()
 
     return render_template("index.html", mars_info=mars_info)
 
+
 @app.route("/scrape")
-def scrape(): 
+def scrape():
 
     mars_info = mongo.db.mars_info
     mars_data = scrape_mars.scrape_mars_news()
@@ -27,5 +28,6 @@ def scrape():
 
     return redirect("/", code=302)
 
-if __name__ == "__main__": 
-    app.run(debug= True)
+
+if __name__ == "__main__":
+    app.run(debug=True)
